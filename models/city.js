@@ -22,7 +22,7 @@ const City = mongoose.model('City', citySchema);
 function validateCity(city) {
     const schema = {
         name: Joi.string().required(),
-        region: Joi.string() //
+        region: Joi.string() 
     }
     return Joi.valildate(city, schema)
 };
