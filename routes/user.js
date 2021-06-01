@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     res.send(users);
 });
 
-router.post('/user', async (req, res) => {
+router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) {
         return res.status(400).send(error.details[0].message)

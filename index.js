@@ -7,6 +7,7 @@ const userRoute = require('./routes/user');
 const ordersRoute = require('./routes/orders');
 const restaurantRoute = require('./routes/restaurant');
 const foodRoute = require('./routes/food');
+const authRoute = require('./routes/auth');
 
 mongoose.connect('mongodb://localhost/restaurant', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
@@ -26,6 +27,7 @@ app.use('/api/users', userRoute);
 app.use('/api/orders', ordersRoute);
 app.use('/api/restaurant', restaurantRoute);
 app.use('/api/food', foodRoute);
+app.use('/api/auth', authRoute);
 
 
 
