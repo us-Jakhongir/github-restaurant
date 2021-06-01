@@ -1,22 +1,21 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
-const User = require('./user');
-const Restaurant = require('./restaurant');
-
+const { User, userSchema } = require('./user');
+const { Restaurant, restaurantSchema } = require('./restaurant');
 
 const ordersSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
-    // restaurant: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Restaurant'
-    // }
-//     total: {
-//         type: Number,
-//         required: true
-//     },
+    },
+    restaurant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Restaurant'
+    },
+    total: {
+        type: Number,
+        required: true
+    },
 //     status: {
 //         type: String,
 //         enum: ['canceled', 'delevired', 'pending', 'ready'],
@@ -62,7 +61,8 @@ const Orders = mongoose.model('Orders', ordersSchema);
 function validateUser(order) {
     const schema = {
         userId: Joi.string().required(),
-        // restaurantId: Joi.string().required()
+        restaurantId: Joi.string().required(),
+        total: Joi.Number().required()
     }
     return Joi.validate(order, schema)
 }

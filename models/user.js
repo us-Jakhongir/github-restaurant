@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const { restaurantSchema } = require('./restaurant')
 
 
 const userSchema = new mongoose.Schema({
     restaurant: {
-        type: '',
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Restaurant'        
     },
     firstName: {
         type: String,
@@ -43,14 +44,15 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     createdAt: {
-       date: {type: Date, default: new Date} // qararlsin
+       date: {type: Date, default: Date.now} 
     },
     updatedAt: {
-        date: {type: Date, default: new Date} // qararlsin
+        date: {type: Date, default: new Date} 
     },
     active: {
         type: Boolean,
-        default: true
+        enum: ['Activ', 'Inactiv'],
+        required: true
     },
     passwordRequested: {
         type: Boolean,
@@ -61,19 +63,21 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema)
+
+ 
 
 function validateUser(user) {
     const schema = {
         firstName: Joi.string().required(),
         lastName: Joi.string().required(),
-        password: Joi.string().required().min(8).max(1024),
         email: Joi.string().required().email(),
-        restaurant: Joi.string().required(),
+        restaurantId: Joi.string().required(),
+        password: Joi.string().required().min(8).max(1024),
         phone: Joi.number().required().min(9),
         address: Joi.string().required(),
         city: Joi.string().required(),
-        active: Joi.boolean()
+        active: Joi.boolean().required()
     }
     return Joi.validate(user, schema)
 }

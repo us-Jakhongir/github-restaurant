@@ -79,4 +79,5 @@ function validateRestaurant(restaurant) {
 }
 
 module.exports.Restaurant = Restaurant;
+module.exports.restaurantSchema = restaurantSchema;
 module.exports.validate = validateRestaurant;

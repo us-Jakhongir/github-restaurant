@@ -57,10 +57,10 @@ const foodSchema = new mongoose.Schema({
 
 const Food = mongoose.model('Food', foodSchema);
 
-// function validateFood(food) {
-//     const schema = {
-
-//     }
-// }
+function validateFood(food) {
+    const schema = {
+        restaurantId: Joi.string().required(),
+    }
+}
 
 module.exports = Food;
