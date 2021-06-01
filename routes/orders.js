@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const {Orders, validate} = require('../models/orders');
-const  User  = require('../models/user');
-const Restaurant = require('../models/orders')
+const { Orders, validate } = require('../models/orders');
+const { User } = require('../models/user');
+const { Restaurant } = require('../models/restaurant')
 
 router.get('/', async (req, res) => {
     const orders = await Orders.find()
@@ -16,28 +16,31 @@ router.post('/', async (req, res) => {
     if (error) {
         return res.status(400).send(error.details[0].message)
     }
-    try {        
-        let user = await User.findById(req.body.userId);
-        if (!user)
-        return res.status(400).send('Berilgan IDga teng bo\'lgan foydalanuvchi topilmadi.')
-        // let restaurant = await Restaurant.findById(req.body.restaurantId)
-        // if (!restaurant) 
-        // return res.status(404).send('Berilgan IDga teng bo\'lgan Restaurant topilmadi.')
-    } catch (error) {
-        res.status(500).send('Kutilmagan xato...')
-    }
+
+    let user = await User.findById(req.body.userId)
+    if (!user)
+        return res.status(400).send('Berilgan IDga teng foydalanuvchi topilmadi')
+
+    let restaurant = await Restaurant.findById(req.body.restaurantId)
+    if (!restaurant)
+        return res.status(400).send('Berilgan IDga teng Restaran topilmadi')
 
 
 
 
 
-    let ord = new Orders({
-        user: {_id: user._id}
-        // restaurantId: { _id: restaurant._id}
+    let order = new Orders({
+        user: {
+            _id: user._id
+        },
+        restaurant: {
+            _id: restaurant._id
+        }
+
     });
 
-    ord = await ord.save();n 
-    res.send(ord)
+    await order.save();
+    res.send(order)
 })
 
 module.exports = router;

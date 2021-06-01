@@ -16,8 +16,9 @@ mongoose.connect('mongodb://localhost/restaurant', { useNewUrlParser: true, useU
         console.error('Connection error', err)
     });
 
-app.use(express.json());
-app.use(express.urlencoded({extended: true}))
+mongoose.set('useFindAndModify', false);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}))
 
     
 
