@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 
 const { User } = require('../models/user')
@@ -16,7 +18,7 @@ router.post('/', async (req, res) => {
 
     let user = await User.findOne({ email: req.body.email})
     if (!user) {
-        return res.status(400).send('Email yoki parol noto\'g\'ri.')
+        return res.status(400).send('Email noto\'g\'ri.')
     }
 
     const isVaildParoll = await bcrypt.compare(req.body.password, user.password);
@@ -24,7 +26,8 @@ router.post('/', async (req, res) => {
         return res.status(400).send('Email yoki parol noto\'g\'ri.')
     }
 
-    res.send(true)
+    const token = user.generateAuthToken();
+    res.header('x-auth-token', token).send(true);
 });
 
 function validate(req) {

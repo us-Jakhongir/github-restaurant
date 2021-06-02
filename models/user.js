@@ -1,12 +1,15 @@
-const mongoose = require('mongoose');
 const Joi = require('joi');
-const { restaurantSchema } = require('./restaurant')
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+
+const { Restaurant } = require('./restaurant');
 
 
 const userSchema = new mongoose.Schema({
     restaurant: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Restaurant'        
+        ref: 'Restaurant'
     },
     firstName: {
         type: String,
@@ -44,10 +47,10 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     createdAt: {
-       date: {type: Date, default: Date.now} 
+        date: { type: Date, default: Date.now }
     },
     updatedAt: {
-        date: {type: Date, default: new Date} 
+        date: { type: Date, default: new Date }
     },
     active: {
         type: Boolean,
@@ -59,13 +62,18 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     passwordRequestedAt: {
-        date: {type: Date, default: Date.now}
+        date: { type: Date, default: Date.now }
     }
 });
 
+userSchema.methods.generateAuthToken = function () {
+    const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+    return token;
+}
+
 const User = mongoose.model('User', userSchema)
 
- 
+
 
 function validateUser(user) {
     const schema = {

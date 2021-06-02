@@ -2,12 +2,16 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const config = require('config');
 
-const userRoute = require('./routes/user');
-const ordersRoute = require('./routes/orders');
-const restaurantRoute = require('./routes/restaurant');
-const foodRoute = require('./routes/food');
-const authRoute = require('./routes/auth');
+console.log(process.env.NODE_ENV);
+console.log(app.get('env'));
+
+if (!config.get('jwtPrivateKey')){
+    console.error('JIDDIY XATO: github-restaurant_jwtPrivateKey muhit o\'zgaruvchisi aniqlanmagan');
+    process.exit(1);
+};
+
 
 mongoose.connect('mongodb://localhost/restaurant', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
@@ -16,6 +20,15 @@ mongoose.connect('mongodb://localhost/restaurant', { useNewUrlParser: true, useU
     .catch((err) => {
         console.error('Connection error', err)
     });
+
+const userRoute = require('./routes/user');
+const ordersRoute = require('./routes/orders');
+const restaurantRoute = require('./routes/restaurant');
+const foodRoute = require('./routes/food');
+const authRoute = require('./routes/auth');
+
+
+
 
 mongoose.set('useFindAndModify', false);
 app.use(bodyParser.json());

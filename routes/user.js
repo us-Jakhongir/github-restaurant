@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 
 const {User, validate} = require('../models/user')
 const {restaurantSchema, Restaurant} = require('../models/restaurant')
+const auth = require('../middleware/auth')
 
 router.get('/', async (req, res) => {   
     const users = await User.find() 
@@ -54,6 +55,14 @@ router.post('/', async (req, res) => {
     
    
 });
+
+router.delete('/:id', auth, async (req, res) => {
+    let user = await User.findByIdAndRemove(req.params.id);
+    if (!user)
+    return res.status(404).send('Berilgan idga teng foydalanuvchi topilmadi.');
+
+    res.send(user);
+})
 
 
 
