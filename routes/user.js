@@ -70,7 +70,7 @@ router.put('/:id', auth, async (req, res) => {
     if (error)
         return res.status(400).send(error.details[0].message);
 
-    let user = await User.findByIdAndUpdate(req.body.id, {
+    let user = await User.findByIdAndUpdate(req.params.id, {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
@@ -80,7 +80,7 @@ router.put('/:id', auth, async (req, res) => {
         city: req.body.city,
         active: req.body.active
     },
-        { new: true });
+    { new: true });
     if (!user)
         return res.status(404).send('Berilgan idga teng foydalanuvchi topilmadi.');
 
