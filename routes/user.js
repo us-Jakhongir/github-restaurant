@@ -4,13 +4,21 @@ const router = express.Router();
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 
-const {User, validate} = require('../models/user')
-const {restaurantSchema, Restaurant} = require('../models/restaurant')
+const { User, validate } = require('../models/user')
+const { restaurantSchema, Restaurant } = require('../models/restaurant')
 const auth = require('../middleware/auth')
 
-router.get('/', async (req, res) => {   
-    const users = await User.find() 
+router.get('/', async (req, res) => {
+    const users = await User.find()
     res.send(users);
+});
+
+router.get('/:id', async (req, res) => {
+    const user = await User.findById(req.params.id).select('-password');
+    if (!user) {
+        return res.status(404).send('Berilgan idga teng foydalanuvchi topilmadi.');
+    }
+    res.send(user);
 });
 
 router.post('/', async (req, res) => {
@@ -24,13 +32,13 @@ router.post('/', async (req, res) => {
         return res.status(400).send('Berilgan IDga teng restaran topilmadi')
     }
 
-    let user = await User.findOne({ email: req.body.email})
+    let user = await User.findOne({ email: req.body.email })
     if (user) {
         return res.status(400).send('Mavjud bo\'lgan foydalanuvchi.')
     }
 
-    
-    
+
+
     user = new User({
         restaurant: {
             _id: restaurant._id,
@@ -43,23 +51,50 @@ router.post('/', async (req, res) => {
         address: req.body.address,
         city: req.body.city,
         active: req.body.active
-    }); 
+    });
 
-   
+
     const salt = await bcrypt.genSalt();
     user.password = await bcrypt.hash(user.password, salt);
-   
-    
+
+
     await user.save();
     res.send(user)
-    
-   
+
+
 });
+
+
+router.put('/:id', auth, async (req, res) => {
+    const { error } = validate(req.body);
+    if (error)
+        return res.status(400).send(error.details[0].message);
+
+    let user = await User.findByIdAndUpdate(req.body.id, {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: req.body.password,
+        phone: req.body.phone,
+        address: req.body.address,
+        city: req.body.city,
+        active: req.body.active
+    },
+        { new: true });
+    if (!user)
+        return res.status(404).send('Berilgan idga teng foydalanuvchi topilmadi.');
+
+    const salt = await bcrypt.genSalt();
+    user.password = await bcrypt.hash(user.password, salt);
+
+    res.send(user);
+});
+
 
 router.delete('/:id', auth, async (req, res) => {
     let user = await User.findByIdAndRemove(req.params.id);
     if (!user)
-    return res.status(404).send('Berilgan idga teng foydalanuvchi topilmadi.');
+        return res.status(404).send('Berilgan idga teng foydalanuvchi topilmadi.');
 
     res.send(user);
 })

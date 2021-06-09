@@ -4,14 +4,15 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('config');
 
-console.log(process.env.NODE_ENV);
-console.log(app.get('env'));
 
 if (!config.get('jwtPrivateKey')){
     console.error('JIDDIY XATO: github-restaurant_jwtPrivateKey muhit o\'zgaruvchisi aniqlanmagan');
     process.exit(1);
 };
 
+mongoose.set('useFindAndModify', false);
+app.use(express.json());
+app.use(express.urlencoded({extended: false}))
 
 mongoose.connect('mongodb://localhost/restaurant', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
@@ -30,9 +31,6 @@ const authRoute = require('./routes/auth');
 
 
 
-mongoose.set('useFindAndModify', false);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}))
 
     
 
