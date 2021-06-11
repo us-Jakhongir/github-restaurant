@@ -56,15 +56,10 @@ const restaurantSchema = new mongoose.Schema({
     // },
     // geoLocation: {
     //     type: String
-    // },
-    // uodatedAt: {
-    //     type: Date, default: Date.now
-    // },
-    // createdAt: {
-    //     type: Date, default: Date.now
-    // },
-
-});
+    // }
+},
+{ timestamps: true }
+);
 
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);

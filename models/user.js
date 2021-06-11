@@ -46,12 +46,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    createdAt: {
-        date: { type: Date, default: Date.now }
-    },
-    updatedAt: {
-        date: { type: Date, default: new Date }
-    },
+    // createdAt: {
+    //     date: { type: Date, default: Date.now }
+    // },
+    // updatedAt: {
+    //     date: { type: Date, default: new Date }
+    // },
     active: {
         type: Boolean,
         enum: ['Activ', 'Inactiv'],
@@ -64,7 +64,9 @@ const userSchema = new mongoose.Schema({
     passwordRequestedAt: {
         date: { type: Date, default: Date.now }
     }
-});
+},
+    { timestamps: true }
+);
 
 userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));

@@ -7,14 +7,10 @@ const foodItemSchema = new mongoose.Schema({
     },
     region: {
         id: id
-    },
-    createdAt: {
-        type: Date
-    },
-    updatedAt: {
-        type: Date
     }
-});
+},
+{ timestamps: true }
+);
 
 const FoodItem = mongoose.model('FoodItem', foodItemSchema);
 

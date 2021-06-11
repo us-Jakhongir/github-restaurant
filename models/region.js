@@ -4,15 +4,10 @@ const Joi = require('joi');
 const regionSchema = new mongoose.Schema({
     name: {
         type: String,        
-    },
-    createdAt: {
-        type: Date
-    },
-    updatedAt: {
-        type: Date
     }
-
-});
+},
+{ timestamps: true }
+);
 
 const City = mongoose.model('City', citySchema);
 

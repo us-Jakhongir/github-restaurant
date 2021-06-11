@@ -27,19 +27,13 @@ const ordersRoute = require('./routes/orders');
 const restaurantRoute = require('./routes/restaurant');
 const foodRoute = require('./routes/food');
 const authRoute = require('./routes/auth');
-
-
-
-
-
-    
+  
 
 app.use('/api/users', userRoute);
 app.use('/api/orders', ordersRoute);
 app.use('/api/restaurant', restaurantRoute);
 app.use('/api/food', foodRoute);
 app.use('/api/auth', authRoute);
-
 
 
 

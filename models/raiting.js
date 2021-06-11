@@ -6,16 +6,10 @@ const ratingSchema = new mongoose.Schema({
     rating: {
         type: Number,
         required: true
-    },
-    createdAt: {
-        type: Number,
-        required: true
-    },
-    userId: {
-        type: String,
-        required: true
     }
-});
+},
+{ timestamps: true }
+);
 
 const Rating = mongoose.model('Rating', ratingSchema);
 

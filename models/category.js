@@ -5,16 +5,10 @@ const categorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
-    },
-    createdAt: {
-        type: Number,
-        required: true
-    },
-    restaurant: {
-        id: Number,
-        required: true
     }
-});
+},
+{ timestamps: true }
+);
 
 const Category = mongoose.model('Category', categorySchema);
 

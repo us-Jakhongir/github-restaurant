@@ -45,16 +45,10 @@ const ordersSchema = new mongoose.Schema({
 //     },
 //     discountType: {
 //         type: ['amount', '%']
-//     },
-//     createdAt: {
-//         type: Date,
-//         default: new Date
-//     },
-//     updatedAt: {
-//         type: Date,
-//         default: new Date
 //     }
-});
+},
+{ timestamps: true }
+);
 
 const Orders = mongoose.model('Orders', ordersSchema);
 
