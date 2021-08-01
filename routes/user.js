@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
 
     user = new User({
         restaurant: {
-            _id: restaurant._id,
+            _id: restaurant._id
         },
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -48,6 +48,9 @@ router.post('/', async (req, res) => {
         password: req.body.password,
         phone: req.body.phone,
         address: req.body.address,
+        // favorites: {
+        //     _id: favorites._id
+        // },
         city: req.body.city,
         active: req.body.active
     });
@@ -65,21 +68,22 @@ router.post('/', async (req, res) => {
 
 
 router.put('/:id', auth, async (req, res) => {
-
-    const salt = await bcrypt.genSalt();
-    req.body.password = await bcrypt.hash(req.body.password, salt);
     if (req.body.userId === req.params.id) {
+        if (req.body.password) {
+            const salt = await bcrypt.genSalt();
+            req.body.password = await bcrypt.hash(req.body.password, salt);
+        } 
         try {
             const user = await User.findByIdAndUpdate(req.params.id, {
-                $set: req.body,
+                $set: req.body
             });
+            res.status(200).json(user);
 
-            res.status(200).json("Ma'lumot yangilandi.")
         } catch (err) {
             return res.status(500).json(err);
         }
     } else {
-        return res.status(403).json("Faqat o'zingizning akkauntingizni yangilashingiz mumkin.")
+        return res.status(404).json("Berilgan IDga teng foydalanuvchi topilmadi.")
     }
 });
 
@@ -89,12 +93,12 @@ router.delete('/:id', auth, async (req, res) => {
     if (req.body.userId === req.params.id) {
         try {
             await User.findByIdAndDelete(req.params.id);
-            res.status(200).json("Foydalanuvchi o'chirildi.");            
+            res.status(200).json("Foydalanuvchi o'chirildi.");
         } catch (err) {
             return res.status(500).json(err);
         }
     } else {
-        return res.status(404).json("Bunday foydalanuvchi mavjud emas.")
+        return res.status(404).json("Bunday foydalanuvchi mavjud emas.").select('-password')
     }
 });
 

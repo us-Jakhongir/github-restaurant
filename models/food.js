@@ -60,7 +60,11 @@ const Food = mongoose.model('Food', foodSchema);
 function validateFood(food) {
     const schema = {
         restaurantId: Joi.string().required(),
+        name: Joi.string().required()
     }
+
+    return Joi.validate(food, schema)
 }
 
-module.exports = Food;
+module.exports.Food = Food;
+module.exports.validateFood = validateFood;

@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 
 const { Restaurant } = require('./restaurant');
+const { Favorites } = require('./favorites');
 
 
 const userSchema = new mongoose.Schema({
@@ -36,7 +37,8 @@ const userSchema = new mongoose.Schema({
         minlength: 9
     },
     favorites: {
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Favorites'
     },
     address: {
         type: String,
@@ -45,13 +47,7 @@ const userSchema = new mongoose.Schema({
     city: {
         type: String,
         required: true
-    },
-    // createdAt: {
-    //     date: { type: Date, default: Date.now }
-    // },
-    // updatedAt: {
-    //     date: { type: Date, default: new Date }
-    // },
+    },    
     active: {
         type: Boolean,
         enum: ['Activ', 'Inactiv'],
@@ -85,6 +81,7 @@ function validateUser(user) {
         restaurantId: Joi.string().required(),
         password: Joi.string().required().min(8).max(1024),
         phone: Joi.number().required().min(9),
+        // favoritesId: Joi.string().required(),
         address: Joi.string().required(),
         city: Joi.string().required(),
         active: Joi.boolean().required()

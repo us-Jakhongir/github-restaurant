@@ -3,20 +3,21 @@ const Joi = require('joi');
 
 const regionSchema = new mongoose.Schema({
     name: {
-        type: String,        
+        type: String,
+        required: true      
     }
 },
 { timestamps: true }
 );
 
-const City = mongoose.model('City', citySchema);
+const Region = mongoose.model('Region', regionSchema);
 
-function validateCity(city) {
+function validateRegion(region) {
     const schema = {
         name: Joi.string().required(),
     }
-    return Joi.valildate(city, schema)
+    return Joi.valildate(region, schema)
 };
 
-module.exports.City = City;
-module.exports.validate = validateCity;
+module.exports.Region = Region;
+module.exports.validate = validateRegion;
